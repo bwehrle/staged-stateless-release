@@ -1,6 +1,3 @@
-[submodule "ivr-operator-kb"]
-	path = ivr-operator-kb
-	url = ./ivr-operator-kb
 [submodule "helm-microservice"]
 	path = helm-microservice
 	url = ./helm-microservice
@@ -10,3 +7,6 @@
 [submodule "kafkabin"]
 	path = kafkabin
 	url = ./kafkabin
+[submodule "ivro"]
+	path = ivro
+	url = ./ivro
