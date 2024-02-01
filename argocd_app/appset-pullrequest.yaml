@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: guestbook-staging
+spec:
+  generators:
+  - pullRequest:
+      github:
+        owner: bwehrle
+        repo: guestbook-app
+        tokenRef:
+          secretName: github-access-token
+          key: token
+      requeueAfterSeconds: 10
+  template:
+    metadata:
+      name: 'guestbook-staging-{{branch}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/bwehrle/guestbook-app
+        targetRevision: '{{head_sha}}'
+        path: manifest/kind-kind
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: guestbook

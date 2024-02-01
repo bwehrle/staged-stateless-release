@@ -1,0 +1,12 @@
+[submodule "ivr-operator-kb"]
+	path = ivr-operator-kb
+	url = ./ivr-operator-kb
+[submodule "helm-microservice"]
+	path = helm-microservice
+	url = ./helm-microservice
+[submodule "httpbin-app"]
+	path = httpbin-app
+	url = ./httpbin-app
+[submodule "kafkabin"]
+	path = kafkabin
+	url = ./kafkabin
