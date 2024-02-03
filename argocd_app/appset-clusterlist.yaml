@@ -16,7 +16,7 @@ spec:
       source:
         chart: httpbin-helm
         repoURL: https://github.com/bwehrle/httpbin-app
-        targetRevision: HEAD
+        targetRevision: main
         path: manifest/{{cluster}}
       destination:
         server: '{{url}}'
