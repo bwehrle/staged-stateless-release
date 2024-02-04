@@ -1,26 +1,32 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: guestbook-staging
+  name: httpbin-staging-branch
 spec:
   generators:
   - pullRequest:
       github:
         owner: bwehrle
-        repo: guestbook-app
+        repo: httpbin-app
         tokenRef:
           secretName: github-access-token
           key: token
       requeueAfterSeconds: 10
   template:
     metadata:
-      name: 'guestbook-staging-{{branch}}'
+      name: 'httpbin-staging-branch{{head_short_sha_7}}'
     spec:
       project: default
+      syncPolicy:
+        automated: {}
       source:
-        repoURL: https://github.com/bwehrle/guestbook-app
+        repoURL: https://github.com/bwehrle/httpbin-app
         targetRevision: '{{head_sha}}'
-        path: manifest/kind-kind
+        path: manifest/staging
+        helm:
+          releaseName: httpbin-branch{{head_short_sha_7}}
+          valueFiles:
+          - values.yaml
       destination:
-        server: https://kubernetes.default.svc
-        namespace: guestbook
+        server: 'https://kubernetes.default.svc'
+        namespace: httpbin-helm

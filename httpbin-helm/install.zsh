@@ -13,7 +13,7 @@ if [[ $1 == "create" ]]; then
 kubectl apply -f namespace.yaml
 helm repo add bwehrle-ms https://bwehrle.github.io/helm-microservice/
 helm repo update
-helm install httpbin-staging bwehrle-ms/microservice --values example-httpbin-values.yaml --namespace httpbin-helm
+helm install httpbin-staging bwehrle-ms/microservice --values example-httpbin-values.yaml --namespace httpbin-helm --version 0.6.2
 elif [[ $1 == "delete" ]]; then
 helm uninstall httpbin-staging --namespace httpbin-helm
 kubectl delete namespace httpbin

@@ -13,11 +13,15 @@ NS=$(kubectl config get-contexts | cut -f 5 -w | tail -n 1)
 kubectl config set-context --current --namespace=argocd
 
 if [[ $1 == "create" ]]; then
-argocd appset create $2 appset-clusterlist.yaml
-argocd appset create $2 appset-pullrequest.yaml
+argocd repocreds add https://github.com/bwehrle --username bwehrle --password $GITHUB_TOKEN --upsert
+argocd appset create $2 appset-clusterlist.yaml  --upsert
+argocd appset create $2 appset-pullrequest.yaml  --upsert
+sed -e "s|MYTOKEN|$GITHUB_TOKEN|g" github-secret.yaml | kubectl apply -f -
+
 elif [[ $1 == "delete" ]]; then
-argocd appset $1 -y guestbook
-argocd appset $1 -y guestbook-staging
+argocd appset $1 -y httpbin-staging
+argocd appset $1 -y httpbin-staging-branch
+kubectl delete secret github-access-token -n argocd
 fi
 
 kubectl config set-context --current --namespace=$NS

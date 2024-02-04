@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: httpbin
+  name: httpbin-staging
 spec:
   generators:
   - list:
@@ -13,11 +13,16 @@ spec:
       name: 'httpbin-{{cluster}}'
     spec:
       project: default
+      syncPolicy:
+        automated: {}
       source:
-        chart: httpbin-helm
         repoURL: https://github.com/bwehrle/httpbin-app
         targetRevision: main
         path: manifest/{{cluster}}
+        helm:
+          releaseName: httpbin-main
+          valueFiles:
+          - values.yaml
       destination:
         server: '{{url}}'
-        namespace: httpbin
+        namespace: httpbin-helm
