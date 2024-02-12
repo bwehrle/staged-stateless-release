@@ -1,0 +1,32 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: context-request-header-filter
+  namespace: istio-system
+spec:
+  configPatches:
+  # Patch that creates "global" lua filter that does nothing useful
+  - applyTo: HTTP_FILTER
+    match:
+      context: SIDECAR_OUTBOUND
+      listener:
+        filterChain:
+          filter:
+            name: "envoy.filters.network.http_connection_manager"
+            subFilter:
+              name: "envoy.filters.http.router"
+    patch:
+      operation: INSERT_BEFORE
+      value: # lua filter specification
+       name: envoy.filters.http.lua
+       typed_config:
+          "@type": "type.googleapis.com/envoy.extensions.filters.http.lua.v3.Lua"
+          defaultSourceCode:
+            inlineString: |
+              function envoy_on_request(request_handle)
+                if not request_handle:headers():get("X-Context-Id") then
+                  local context_id = os.getenv("MIRO_CONTEXT_ID")
+                  request_handle:headers():add("X-Context-Id", context_id)
+                end
+              end

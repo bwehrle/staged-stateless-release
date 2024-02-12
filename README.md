@@ -15,6 +15,9 @@ The flow works like this:
 * Ivro creates a new VirtualService out of the VirtualServiceHttpRoute and the VirtualServiceBase resources.
 * Traffic is routed between the two deployments using the VirtualService
 
+# Recent changes:
+1. Move "response header" functionality to an EnvoyFilter inside the istio setup
+1. Add "request header" functionality- an EnvoyFilter 
 
 # Notes on limitations:
 * "kafkabin" is not yet set up- the demo does not show how message topics are handled
@@ -26,7 +29,7 @@ The flow works like this:
 
 * argocd - installation of ArgoCD
 * argocd_app - define and install ArgoCD AppSets
-* helm-microservice - (submodule) microservice helm chart
+* helm-microservice - (submodule) microservice helm chart and example values
 * httpbin-app - source repository for httpbin and its per-environment Chart and values files
 * httpbin-helm - test folder for validating helm deployment of the service
 * istio_setup - scripts for installing istio
@@ -63,9 +66,12 @@ make deploy
 popd
 ```
 
-* Install argocd using script
+* Install Istio using script
 ```sh
-pushd istio_setup && ./install.sh && popd
+pushd istio_setup
+./install.sh
+./install-envoy-filter.zsh
+popd
 ```
 
 * Install Argocd and ArgoCD tunnel.  
